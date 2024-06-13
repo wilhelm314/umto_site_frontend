@@ -1,23 +1,4 @@
-import React, { useState } from "react";
-
-export type blogpost_entry = {
-    id: number,
-    attributes: {
-        Title: string,
-        createdAt: string,
-        updateAt: string,
-        publishedAt: string
-    }
-}
-export type test_entry = {
-    id: number,
-    attributes: {
-        richtext: rich_text_element[],
-        createdAt: string,
-        updateAt: string,
-        publishedAt: string
-    }
-}
+import React from "react";
 
 
 // types for the rich_text_element type
@@ -45,7 +26,6 @@ type image = {
 // rich_text_element type for the set of possible types given by strapi in the richtext api endpoint
 export type rich_text_element = paragraph | heading | list | list_item | quote | code | text | image;
 
-//recursive function that determines the atomic type of rich_text_element and turns it into HTML
 export function parseRichText(r: rich_text_element) {
     switch (r.type) {
         case "heading":
@@ -80,12 +60,3 @@ export function parseRichText(r: rich_text_element) {
             return <img src={r.image.url} alt={r.image.caption} width={r.image.width} height={r.image.height} />
     }
 }
-
-
-
-const api_adress = 'http://localhost:1337'
-export const collections: { [key: string]: URL } = {
-    blogposts: new URL("api/blogposts", api_adress),
-    tests: new URL("api/tests", api_adress)
-};
-

@@ -3,7 +3,7 @@ import { Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import 'ol/ol.css';
-import { MapPoints } from './map_point_manager';
+import { map_points_layer } from './map_point_manager';
 
 export function MapComponent() {
     useEffect(() => {
@@ -24,7 +24,7 @@ export function MapComponent() {
     }, []);
 
     return (
-        <div style={{ height: '300px', width: '100%' }} id="map" className="map-container" />
+        <div style={{ height: '600px', width: '100%' }} id="map" className="map-container" />
     );
 }
 

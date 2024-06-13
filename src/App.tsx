@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { collections, blogpost_entry, rich_text_element, test_entry, parseRichText } from './components/strapi_interface';
+import { collections } from './components/strapi/strapi_interface';
+import { parseRichText } from './components/strapi/strapi_rich_text';
 import { navbar } from './components/navbar';
 import { MapComponent } from './components/map/map_renderer';
 import { AnyType } from 'ol/expr/expression';
 import { assert } from 'console';
+import { blogpost_entry, test_entry } from './components/strapi/strapi_entries';
 
 function App() {
   const [get_blogpost_text, set_blogpost_text] = useState([]);
