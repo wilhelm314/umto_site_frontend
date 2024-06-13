@@ -26,6 +26,7 @@ type image = {
 // rich_text_element type for the set of possible types given by strapi in the richtext api endpoint
 export type rich_text_element = paragraph | heading | list | list_item | quote | code | text | image;
 
+// recursive function that determines atomic type for rich text element and outputs appropriate HTML
 export function parseRichText(r: rich_text_element) {
     switch (r.type) {
         case "heading":
