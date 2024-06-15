@@ -7,7 +7,7 @@ export function navbar() {
 
 
     return (
-        <div className="container bg-grey mx-auto max-w-full p-5 font-Consolas text-2xl font-bold ">
+        <div key="nav1" className="container bg-grey mx-auto max-w-full p-5 font-Consolas text-2xl font-bold ">
             <div className="mx-10 max-w-full text-right	tracking-wider antialiased">
 
                 <a href="" className="m-20 text-black hover:text-maincolor">HOME</a>

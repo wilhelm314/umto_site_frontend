@@ -1,5 +1,6 @@
 import React from "react";
 import { rich_text_element } from "./strapi_rich_text";
+import { EnumType } from "typescript";
 
 export type MapPoint = {
     ref?: URL,
@@ -39,9 +40,12 @@ export type test_entry = {
     }
 }
 
-export type venue_entry = {
+export type culture_contributer_type = "venue" | "youthHouse";
+
+export type culture_contributer_entry = {
     id: number,
     attributes: {
+        tag: culture_contributer_type,
         createdAt: string,
         updateAt: string,
         publishedAt: string,

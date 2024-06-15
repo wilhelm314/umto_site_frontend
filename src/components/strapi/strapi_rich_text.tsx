@@ -27,37 +27,39 @@ type image = {
 export type rich_text_element = paragraph | heading | list | list_item | quote | code | text | image;
 
 // recursive function that determines atomic type for rich text element and outputs appropriate HTML
+
+let key_counter = 0;
 export function parseRichText(r: rich_text_element) {
     switch (r.type) {
         case "heading":
             switch (r.level) {
-                case 1: return (<h1>{r.children.map(x => parseRichText(x))}</h1>);
-                case 2: return (<h2>{r.children.map(x => parseRichText(x))}</h2>);
-                case 3: return (<h3>{r.children.map(x => parseRichText(x))}</h3>);
-                case 4: return (<h4>{r.children.map(x => parseRichText(x))}</h4>);
-                case 5: return (<h5>{r.children.map(x => parseRichText(x))}</h5>);
-                case 6: return (<h6>{r.children.map(x => parseRichText(x))}</h6>);
+                case 1: return (<h1 key={key_counter++}>{r.children.map(x => parseRichText(x))}</h1>);
+                case 2: return (<h2 key={key_counter++}>{r.children.map(x => parseRichText(x))}</h2>);
+                case 3: return (<h3 key={key_counter++}>{r.children.map(x => parseRichText(x))}</h3>);
+                case 4: return (<h4 key={key_counter++}>{r.children.map(x => parseRichText(x))}</h4>);
+                case 5: return (<h5 key={key_counter++}>{r.children.map(x => parseRichText(x))}</h5>);
+                case 6: return (<h6 key={key_counter++}>{r.children.map(x => parseRichText(x))}</h6>);
                 default: throw new Error();
             };
         case "paragraph":
-            return (<p>{r.children.map(x => parseRichText(x))}</p>);
+            return (<p key={key_counter++}>{r.children.map(x => parseRichText(x))}</p>);
         case "list":
             switch (r.format) {
                 case "ordered":
-                    return (<ol>{r.children.map(x => parseRichText(x))}</ol>);
+                    return (<ol key={key_counter++}>{r.children.map(x => parseRichText(x))}</ol>);
                 case "unordered":
-                    return (<ul>{r.children.map(x => parseRichText(x))}</ul>);
+                    return (<ul key={key_counter++}>{r.children.map(x => parseRichText(x))}</ul>);
                 default: throw new Error();
             };
         case "list-item":
-            return (<li>{r.children.map(x => parseRichText(x))}</li>);
+            return (<li key={key_counter++}>{r.children.map(x => parseRichText(x))}</li>);
         case "quote":
-            return (<p>{r.children.map(x => parseRichText(x))}</p>);
+            return (<p key={key_counter++}>{r.children.map(x => parseRichText(x))}</p>);
         case "code":
-            return (<p>{r.children.map(x => parseRichText(x))}</p>);
+            return (<p key={key_counter++}>{r.children.map(x => parseRichText(x))}</p>);
         case "text":
             return (r.text);
         case "image":
-            return <img src={r.image.url} alt={r.image.caption} width={r.image.width} height={r.image.height} />
+            return <img key={key_counter++} src={r.image.url} alt={r.image.caption} width={r.image.width} height={r.image.height} />
     }
 }
