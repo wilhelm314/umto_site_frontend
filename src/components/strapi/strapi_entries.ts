@@ -1,24 +1,8 @@
 import React from "react";
 import { rich_text_element } from "./strapi_rich_text";
 import { EnumType } from "typescript";
+import { MapPoint } from "./strapi_map_point";
 
-export type MapPoint = {
-    ref?: URL,
-    id: number,
-    title: string,
-    lattitude: number,
-    longitude: number,
-    richtext: rich_text_element[]
-    image: {
-        name: string,
-        alternativeText: string,
-        url: string,
-        caption: string,
-        width: number,
-        height: number,
-        formats: any
-    }
-}
 
 export type blogpost_entry = {
     id: number,
