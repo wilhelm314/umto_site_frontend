@@ -10,8 +10,9 @@ type list_item = { type: "list-item", children: rich_text_element[] }
 type quote = { type: "quote", children: rich_text_element[] }
 type code = { type: "code", children: rich_text_element[] }
 type text = { type: "text", text: string }
-type image = {
-    type: "image", image: {
+type rich_text_image = {
+    type: "image",
+    image: {
         name: string,
         alternativeText: string,
         url: string,
@@ -24,7 +25,7 @@ type image = {
 
 
 // rich_text_element type for the set of possible types given by strapi in the richtext api endpoint
-export type rich_text_element = paragraph | heading | list | list_item | quote | code | text | image;
+export type rich_text_element = paragraph | heading | list | list_item | quote | code | text | rich_text_image;
 
 // recursive function that determines atomic type for rich text element and outputs appropriate HTML
 
