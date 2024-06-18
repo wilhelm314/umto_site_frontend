@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useEffect, useContext, useRef, ReactElement } from 'react';
 import { Feature, Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
@@ -25,10 +25,14 @@ import { isValidInputTimeValue } from '@testing-library/user-event/dist/utils';
 
 export function MapRowComponent() {
     const source = useRef(new VectorSource());
+    const [get_active_culture_contributer, set_active_culture_contributer] = useState<culture_contributer_entry>()
+    const [get_active_profile_display, set_active_profile_display] = useState<ReactElement>()
     const [get_contributer_types, set_contributer_types] = useState<culture_contributer_type[]>([])
     const [get_tooltip, set_tooltip] = useState<React.ReactElement>();
     const [get_cPixel, set_cPixel] = useState({ x: 0, y: 0 })
 
+
+    // generates map and listens for input
     useEffect(() => {
 
         const mapLayer = new TileLayer({
@@ -73,11 +77,30 @@ export function MapRowComponent() {
             });
         });
 
+        map.on('click', function (evt) {
+            const pixel = map.getEventPixel(evt.originalEvent);
+            pointsLayer.getFeatures(pixel).then(x => {
+                if (x.length == 1) {
+                    fetch(getCcEntryUrl(x[0].getId() as number))
+                        .then(x => x.json())
+                        .then((x) => {
+                            set_active_culture_contributer(x.data as culture_contributer_entry)
+                        });
+                }
+            });
+        });
+
+        map.on('movestart', function (evt) {
+            set_tooltip(undefined);
+            map.getTargetElement().style.cursor = 'auto';
+        })
+
         // TODO: unsubscibe map eventhandlers
         return () => { if (map) map.setTarget(undefined) }
     }, []);
 
 
+    // generates map features
     useEffect(() => {
         fetch(collections.culture_contributers)
             .then(x => x.json())
@@ -110,8 +133,22 @@ export function MapRowComponent() {
 
                     ));
             });
-        console.log(get_contributer_types);
     }, [get_contributer_types])
+
+    // generates colture contrubter profile
+    useEffect(() => {
+        const p = get_active_culture_contributer?.Profile
+        set_active_profile_display(() => {
+            return (
+                <div id='pp'>
+                    <h1>{p?.title}</h1>
+
+                </div>
+            )
+        });
+
+
+    }, [get_active_culture_contributer])
 
 
     return (
@@ -143,13 +180,15 @@ export function MapRowComponent() {
 
                     <label htmlFor="ch2">youth houses</label>
                 </div>
-
             </div>
 
             <div style={{ height: '600px', width: '800px' }} id="map" className="map-container relative basis-5/12">
                 <div id='tooltip' style={{ top: `${get_cPixel.y}px`, left: `${get_cPixel.x}px` }} className={'absolute z-50 -translate-y-[120%] -translate-x-1/2 pointer-events-none'}>{get_tooltip}</div>
             </div>
 
+            <div id='profile_display' className='basis 6/12'>
+                {get_active_profile_display}
+            </div>
 
         </div>
     );
