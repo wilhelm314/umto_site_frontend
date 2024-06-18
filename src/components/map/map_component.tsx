@@ -154,32 +154,31 @@ export function MapRowComponent() {
     return (
         <div key="m1" className='container flex flex-row p-10 mx-auto max-w-full'>
             <div id='filter' className='container basis-1/12 p-2'>
+
                 <div>
                     <input type="checkbox" id="ch1" name='test' onChange={(e) => {
                         e.target.checked
                             ? set_contributer_types((p) => [...get_contributer_types, 'venue'])
                             : set_contributer_types(() => {
                                 var x = get_contributer_types;
-
                                 return x.filter(xx => xx !== 'venue');
                             })
                     }} />
                     <label htmlFor="ch1">venues</label>
-
                 </div>
+
                 <div>
                     <input type="checkbox" id="ch2" onChange={(e) => {
                         e.target.checked
                             ? set_contributer_types((p) => [...get_contributer_types, 'youthHouse'])
                             : set_contributer_types(() => {
                                 var x = get_contributer_types;
-
                                 return x.filter(xx => xx !== 'youthHouse');
                             })
                     }} />
-
                     <label htmlFor="ch2">youth houses</label>
                 </div>
+
             </div>
 
             <div style={{ height: '600px', width: '800px' }} id="map" className="map-container relative basis-5/12">
