@@ -38,7 +38,8 @@ export type culture_contributer_entry = {
     Profile: {
         id: number,
         title: string,
-        richtext: rich_text_element[]
+        richtext: rich_text_element[],
+        address: string
     },
     ContactInformation: {
         id: number,

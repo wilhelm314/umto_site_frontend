@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { MapComponent } from './components/map/map_renderer';
+import { MapRowComponent } from './components/map/map_component';
 import { navbar } from './components/navbar';
 import { blogpost_entry, test_entry } from './components/strapi/strapi_entries';
 import { collections } from './components/strapi/strapi_interface';
@@ -32,14 +32,8 @@ function App() {
 
       {navbar()}
       <div key="a2" className="text-xl font-medium text-black">
-        <header className="App-header">
-          <p>
-            hello {get_blogpost_text} {"hello fart!"}
-          </p>
-        </header>
       </div>
-      <div key="a3" className='container mx-auto max-w-xl'>{get_test_richtext}</div>
-      <MapComponent />
+      <MapRowComponent />
     </div>
 
   );

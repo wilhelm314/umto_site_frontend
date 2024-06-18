@@ -15,14 +15,22 @@ import { getCcEntryUrl } from '../strapi/strapi_interface';
 import { Pixel } from 'ol/pixel';
 import { translate } from 'ol/transform';
 import { MPTooltip } from '../strapi/strapi_map_point';
+import { cursorTo } from 'readline';
+import { createIncrementalCompilerHost } from 'typescript';
+import { isValidInputTimeValue } from '@testing-library/user-event/dist/utils';
 
-export function MapComponent() {
+
+
+
+
+export function MapRowComponent() {
     const source = useRef(new VectorSource());
-    const [get_contributer_type, set_contributer_type] = useState<culture_contributer_type>()
+    const [get_contributer_types, set_contributer_types] = useState<culture_contributer_type[]>([])
     const [get_tooltip, set_tooltip] = useState<React.ReactElement>();
     const [get_cPixel, set_cPixel] = useState({ x: 0, y: 0 })
 
     useEffect(() => {
+
         const mapLayer = new TileLayer({
             preload: Infinity,
             source: new OSM(),
@@ -39,11 +47,12 @@ export function MapComponent() {
             }),
         });
 
-        map.on('click', function (evt) {
+        map.on('pointermove', function (evt) {
             const pixel = map.getEventPixel(evt.originalEvent);
             pointsLayer.getFeatures(pixel).then(x => {
 
                 if (x.length == 1) {
+                    map.getTargetElement().style.cursor = 'pointer';
                     const id = x[0].getId() as number
                     const coord = (x[0].getGeometry() as Point).getCoordinates();
                     const cpixel = map.getPixelFromCoordinate(coord);
@@ -57,18 +66,12 @@ export function MapComponent() {
                             set_tooltip(MPTooltip(xx.attributes.MapPoint));
                         });
                 } else {
+                    // this doesnt work when u get the mouse on top of the tooltip quickly
                     set_tooltip(undefined);
+                    map.getTargetElement().style.cursor = 'auto';
                 }
             });
-
-            map.on(['pointerdrag', 'movestart'], function (evt) {
-                set_tooltip(undefined);
-            });
-
-
         });
-
-
 
         // TODO: unsubscibe map eventhandlers
         return () => { if (map) map.setTarget(undefined) }
@@ -81,20 +84,23 @@ export function MapComponent() {
             .then(x => {
                 source.current.clear();
                 source.current.addFeatures(x.data
-                    .filter((x: culture_contributer_entry) => x.attributes.tag == get_contributer_type)
+                    .filter((x: culture_contributer_entry) => get_contributer_types.includes(x.attributes.tag))
                     .map((x: culture_contributer_entry) => {
+                        console.log(get_contributer_types);
+
                         const feature = new Feature({
                             geometry: new Point(fromLonLat([x.attributes.MapPoint.longitude, x.attributes.MapPoint.lattitude])),
                         });
+                        // bounding box doesnt match shape
                         feature.setId(x.id);
                         feature.setStyle(new Style({
                             image: new CircleStyle({
-                                radius: 8,
+                                radius: 7,
                                 fill: new Fill({
-                                    color: 'rgba(255, 153, 0, 0.4)'
+                                    color: '#FFFFFF'
                                 }),
                                 stroke: new Stroke({
-                                    color: 'rgba(255, 153, 0, 0.4)',
+                                    color: '#FF4747',
                                     width: 2
                                 }),
                             })
@@ -104,23 +110,47 @@ export function MapComponent() {
 
                     ));
             });
-    }, [get_contributer_type])
+        console.log(get_contributer_types);
+    }, [get_contributer_types])
 
 
     return (
-        <div key="m1">
-            <div style={{ height: '600px', width: '800px' }} id="map" className="map-container relative">
-                <div id='tooltip' style={{ top: `${get_cPixel.y}px`, left: `${get_cPixel.x}px` }} className={`absolute w-50 h-50 z-50 -translate-y-[110%] -translate-x-1/2 `}>{get_tooltip}</div>
+        <div key="m1" className='container flex flex-row p-10 mx-auto max-w-full'>
+            <div id='filter' className='container basis-1/12 p-2'>
+                <div>
+                    <input type="checkbox" id="ch1" name='test' onChange={(e) => {
+                        e.target.checked
+                            ? set_contributer_types((p) => [...get_contributer_types, 'venue'])
+                            : set_contributer_types(() => {
+                                var x = get_contributer_types;
+
+                                return x.filter(xx => xx !== 'venue');
+                            })
+                    }} />
+                    <label htmlFor="ch1">venues</label>
+
+                </div>
+                <div>
+                    <input type="checkbox" id="ch2" onChange={(e) => {
+                        e.target.checked
+                            ? set_contributer_types((p) => [...get_contributer_types, 'youthHouse'])
+                            : set_contributer_types(() => {
+                                var x = get_contributer_types;
+
+                                return x.filter(xx => xx !== 'youthHouse');
+                            })
+                    }} />
+
+                    <label htmlFor="ch2">youth houses</label>
+                </div>
+
             </div>
 
-            <button key="bv" onClick={() => {
-                set_tooltip(undefined);
-                return set_contributer_type("venue");
-            }}>venue</button>
-            <button key="by" onClick={() => {
-                set_tooltip(undefined);
-                return set_contributer_type("youthHouse");
-            }}>youthHouse</button>
+            <div style={{ height: '600px', width: '800px' }} id="map" className="map-container relative basis-5/12">
+                <div id='tooltip' style={{ top: `${get_cPixel.y}px`, left: `${get_cPixel.x}px` }} className={'absolute z-50 -translate-y-[120%] -translate-x-1/2 pointer-events-none'}>{get_tooltip}</div>
+            </div>
+
+
         </div>
     );
 }
