@@ -109,7 +109,6 @@ export function MapRowComponent() {
                 source.current.addFeatures(x.data
                     .filter((x: culture_contributer_entry) => get_contributer_types.includes(x.attributes.tag))
                     .map((x: culture_contributer_entry) => {
-                        console.log(get_contributer_types);
 
                         const feature = new Feature({
                             geometry: new Point(fromLonLat([x.attributes.MapPoint.longitude, x.attributes.MapPoint.lattitude])),
