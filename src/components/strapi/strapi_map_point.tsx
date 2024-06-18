@@ -21,7 +21,6 @@ export type MapPoint = {
 }
 
 export function MPTooltip(p: MapPoint) {
-    console.log(p.address);
     return (
         <div key="t1" className="container mx-auto bg-white rounded-md p-2 h-30 w-40 outline-secondcolor outline-8">
             <h1 key="t2" className="text-l font-sans font-semibold text-center underline">{p.title}</h1>
