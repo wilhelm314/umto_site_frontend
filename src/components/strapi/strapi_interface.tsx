@@ -5,8 +5,16 @@ const api_adress = 'http://localhost:1337'
 
 // all URLs are with full populates
 
-export function getCcEntryUrl(id: number) {
-    return new URL(`api/culture-contributers${"/" + id}?populate[0]=MapPoint&populate[1]=contactInformation.contactPerson&populate[2]=Profile.gallery`, api_adress)
+export function getCcProfile(id: number) {
+    return new URL(`api/culture-contributers${"/" + id}?populate[0]=Profile.gallery`, api_adress)
+}
+
+export function getCcMapPoints() {
+    return new URL('api/culture-contributers?populate[0]=MapPoint', api_adress)
+}
+
+export function getCcMapPoint(id: number) {
+    return new URL(`api/culture-contributers${"/" + id}?populate[0]=MapPoint`, api_adress)
 }
 
 export function getImageURL(path: string) {

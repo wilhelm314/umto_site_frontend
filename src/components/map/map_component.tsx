@@ -8,9 +8,9 @@ import VectorSource from 'ol/source/Vector';
 import { Point } from 'ol/geom';
 import { fromLonLat } from 'ol/proj';
 import VectorLayer from 'ol/layer/Vector';
-import { collections, getImageURL } from '../strapi/strapi_interface';
+import { collections, getCcMapPoint, getCcMapPoints, getImageURL } from '../strapi/strapi_interface';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style.js';
-import { getCcEntryUrl } from '../strapi/strapi_interface';
+import { getCcProfile } from '../strapi/strapi_interface';
 import { MPTooltip } from '../strapi/strapi_map_point';
 import { ImageSlider } from '../ImageSlider';
 import { parseRichText } from '../strapi/strapi_rich_text';
@@ -56,7 +56,7 @@ export function MapRowComponent() {
                 set_cPixel({ x: cpixel[0], y: cpixel[1] });
 
                 set_tt_visible(true);
-                fetch(getCcEntryUrl(id))
+                fetch(getCcMapPoint(id))
                     .then(x => x.json())
                     .then((x) => {
                         const xx = x.data as culture_contributer_entry;
@@ -74,7 +74,7 @@ export function MapRowComponent() {
             const pixel = map.getEventPixel(evt.originalEvent);
             pointsLayer.getFeatures(pixel).then(x => {
                 if (x.length == 1) {
-                    fetch(getCcEntryUrl(x[0].getId() as number))
+                    fetch(getCcProfile(x[0].getId() as number))
                         .then(x => x.json())
                         .then((x) => {
                             set_active_culture_contributer(x.data as culture_contributer_entry)
@@ -94,7 +94,7 @@ export function MapRowComponent() {
 
     // generates map features
     useEffect(() => {
-        fetch(collections.culture_contributers)
+        fetch(getCcMapPoints())
             .then(x => x.json())
             .then(x => {
                 source.current.clear();
