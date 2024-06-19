@@ -71,6 +71,7 @@ export type culture_contributer_entry = {
         title: string,
         richtext: rich_text_element[],
         address: string
+        gallery: gallery
     },
     ContactInformation: {
         id: number,

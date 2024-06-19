@@ -1,27 +1,17 @@
-import React, { useState, useEffect, useContext, useRef, ReactElement } from 'react';
+import React, { useState, useEffect, useRef, ReactElement } from 'react';
 import { Feature, Map, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import 'ol/ol.css';
 import { culture_contributer_entry, culture_contributer_type } from '../strapi/strapi_entries';
 import VectorSource from 'ol/source/Vector';
-import { Geometry, Point } from 'ol/geom';
+import { Point } from 'ol/geom';
 import { fromLonLat } from 'ol/proj';
 import VectorLayer from 'ol/layer/Vector';
-import { collections } from '../strapi/strapi_interface';
+import { collections, getImageURL } from '../strapi/strapi_interface';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style.js';
-import { click } from '@testing-library/user-event/dist/click';
 import { getCcEntryUrl } from '../strapi/strapi_interface';
-import { Pixel } from 'ol/pixel';
-import { translate } from 'ol/transform';
 import { MPTooltip } from '../strapi/strapi_map_point';
-import { cursorTo } from 'readline';
-import { createIncrementalCompilerHost } from 'typescript';
-import { isValidInputTimeValue } from '@testing-library/user-event/dist/utils';
-
-
-
-
 
 export function MapRowComponent() {
     const source = useRef(new VectorSource());
@@ -54,12 +44,11 @@ export function MapRowComponent() {
         map.on('pointermove', function (evt) {
             const pixel = map.getEventPixel(evt.originalEvent);
             pointsLayer.getFeatures(pixel).then(x => {
-
                 if (x.length == 1) {
                     map.getTargetElement().style.cursor = 'pointer';
                     const id = x[0].getId() as number
-                    const coord = (x[0].getGeometry() as Point).getCoordinates();
-                    const cpixel = map.getPixelFromCoordinate(coord);
+                    const pcoord = (x[0].getGeometry() as Point).getCoordinates();
+                    const cpixel = map.getPixelFromCoordinate(pcoord);
                     set_cPixel({ x: cpixel[0], y: cpixel[1] });
 
 
@@ -74,6 +63,7 @@ export function MapRowComponent() {
                     set_tooltip(undefined);
                     map.getTargetElement().style.cursor = 'auto';
                 }
+
             });
         });
 
@@ -98,7 +88,6 @@ export function MapRowComponent() {
         // TODO: unsubscibe map eventhandlers
         return () => { if (map) map.setTarget(undefined) }
     }, []);
-
 
     // generates map features
     useEffect(() => {
@@ -141,7 +130,6 @@ export function MapRowComponent() {
             return (
                 <div id='pp'>
                     <h1>{p?.title}</h1>
-
                 </div>
             )
         });
@@ -181,7 +169,7 @@ export function MapRowComponent() {
             </div>
 
             <div style={{ height: '600px', width: '800px' }} id="map" className="map-container relative basis-5/12">
-                <div id='tooltip' style={{ top: `${get_cPixel.y}px`, left: `${get_cPixel.x}px` }} className={'absolute z-50 -translate-y-[120%] -translate-x-1/2 pointer-events-none'}>{get_tooltip}</div>
+                <div id='tooltip' style={{ top: `${get_cPixel.y}px`, left: `${get_cPixel.x}px` }} className={'absolute z-50 -translate-y-[120%] h-30 w-40 -translate-x-1/2 pointer-events-none'}>{get_tooltip}</div>
             </div>
 
             <div id='profile_display' className='basis 6/12'>
