@@ -65,17 +65,18 @@ export type culture_contributer_entry = {
         updateAt: string,
         publishedAt: string,
         MapPoint: MapPoint
-    },
-    Profile: {
-        id: number,
-        title: string,
-        richtext: rich_text_element[],
-        address: string
-        gallery: gallery
-    },
-    ContactInformation: {
-        id: number,
-        Contacts: { id: number, name: string, role: string, email: string, phone: string }[]
+
+        Profile: {
+            id: number,
+            title: string,
+            richtext: rich_text_element[],
+            address: string
+            gallery: gallery
+        },
+        ContactInformation: {
+            id: number,
+            Contacts: { id: number, name: string, role: string, email: string, phone: string }[]
+        }
     }
 }
 
