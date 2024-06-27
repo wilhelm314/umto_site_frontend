@@ -57,6 +57,29 @@ export type test_entry = {
 
 export type culture_contributer_type = "venue" | "youthHouse";
 
+export type column_component = {
+    id: number,
+    richtext: rich_text_element[],
+    title: string,
+    gallery: gallery,
+    backroundImage: image
+}
+
+export type row_component = {
+    id: number,
+    columnComponent: column_component[]
+}
+
+export type page_entry = {
+    id: number,
+    attributes: {
+        createdAt: string,
+        updateAt: string,
+        publishedAt: string,
+        rowComponent: row_component[]
+    }
+}
+
 export type culture_contributer_entry = {
     id: number,
     attributes: {
