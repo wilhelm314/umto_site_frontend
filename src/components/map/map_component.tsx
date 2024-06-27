@@ -17,24 +17,10 @@ import { parseRichText } from '../strapi/strapi_rich_text';
 import { Link, Route, Routes } from 'react-router-dom';
 import { useSearchParams } from "react-router-dom";
 import { hover } from '@testing-library/user-event/dist/hover';
+import { useSearchParam } from '../SearchParamManager';
 
 
-function useSearchParam(key: string): [string | null, (val: string | number) => void] {
-    const [searchParams, setSearchParams] = useSearchParams();
-    const [param, setParam] = useState(searchParams.get(key));
-    const setValue = (value: string | number) => {
-        setSearchParams((sold) => {
-            sold.set(key, value.toString())
-            return sold;
-        });
-    };
 
-    useEffect(() => {
-        setParam(searchParams.get(key));
-    }, [searchParams]);
-
-    return [param, setValue]
-}
 
 
 
@@ -48,7 +34,7 @@ export function MapRowComponent() {
     const [tooltipMapPoint, setTooltipMapPoint] = useState<{ id: number, mapPoint: MapPoint }>();
     const [cPixel, setCPixel] = useState({ x: 0, y: 0 })
     const [ttVisible, setTtVisible] = useState(false);
-    const [cc, setValue] = useSearchParam("cc");
+    const [cc, setCc] = useSearchParam("cc");
     const map = useRef<Map>(new Map)
 
 
@@ -97,7 +83,7 @@ export function MapRowComponent() {
             const pixel = map.current.getEventPixel(evt.originalEvent);
             pointsLayer.getFeatures(pixel).then(x => {
                 if (x.length == 1) {
-                    setValue(x[0].getId() ?? "");
+                    setCc(x[0].getId() ?? "");
                 }
 
                 return;
