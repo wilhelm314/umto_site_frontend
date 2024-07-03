@@ -23,8 +23,20 @@ interface signInInput {
     password: string;
 }
 
+type signInError = {
+    status: number,
+    name: string,
+    message: string,
+    details: {}
+}
+
 
 const SignIn = () => {
+
+    const isSignInError = (error: any): error is signInError => {
+        return (error as signInError).message !== undefined;
+    };
+
     const navigate = useNavigate();
 
     const { setUser } = useAuthContext();
@@ -62,9 +74,12 @@ const SignIn = () => {
 
                 navigate("/backstage/profile", { replace: true });
             }
-        } catch (error) {
-            console.error(error);
-            setError("Something went wrong!");
+        } catch (err) {
+            if (isSignInError(err)) {
+                setError(err.message);
+            } else {
+                setError("Something went wrong!");
+            }
         } finally {
             setIsLoading(false);
         }
