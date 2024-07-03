@@ -7,6 +7,18 @@ export type image = {
     data: image_data
 }
 
+export type user = {
+    id: number,
+    username: string,
+    email: string,
+    provider: string,
+    confirmed: boolean,
+    blocked: boolean,
+    createdAt: string,
+    updatedAt: string
+}
+
+
 type image_data = {
     id: number
     attributes: {

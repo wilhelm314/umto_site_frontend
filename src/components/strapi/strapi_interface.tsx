@@ -1,7 +1,24 @@
 import React, { useState } from "react";
 
+const AUTH_TOKEN = "authToken";
+export const BEARER = "Bearer";
+export const api_adress = 'http://localhost:1337'
 
-const api_adress = 'http://localhost:1337'
+export const getToken = () => {
+    return localStorage.getItem(AUTH_TOKEN);
+};
+
+export const setToken = (token: string) => {
+    if (token) {
+        localStorage.setItem(AUTH_TOKEN, token);
+    }
+};
+
+export const removeToken = () => {
+    localStorage.removeItem(AUTH_TOKEN);
+};
+
+
 
 // all URLs are with full populates
 

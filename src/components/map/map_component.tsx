@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, ReactElement, useCallback } from 'react';
+import { useState, useEffect, useRef, ReactElement, useCallback } from 'react';
 import { Feature, Map, MapBrowserEvent, View } from 'ol';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
@@ -8,16 +8,13 @@ import VectorSource from 'ol/source/Vector';
 import { Point } from 'ol/geom';
 import { fromLonLat } from 'ol/proj';
 import VectorLayer from 'ol/layer/Vector';
-import { collections, getCcMapPoint, getCcMapPoints, getImageURL } from '../strapi/strapi_interface';
+import { getCcMapPoint, getCcMapPoints, getImageURL } from '../strapi/strapi_interface';
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style.js';
 import { getCcProfile } from '../strapi/strapi_interface';
 import { MPTooltip, MapPoint } from '../strapi/strapi_map_point';
 import { ImageSlider } from '../ImageSlider';
 import { parseRichText } from '../strapi/strapi_rich_text';
-import { Link, Route, Routes } from 'react-router-dom';
-import { useSearchParams } from "react-router-dom";
-import { hover } from '@testing-library/user-event/dist/hover';
-import { useSearchParam } from '../SearchParamManager';
+import { paramArrayParser, paramArrayToString, useSearchParam } from '../SearchParamManager';
 
 
 
@@ -29,39 +26,65 @@ import { useSearchParam } from '../SearchParamManager';
 
 export function MapRowComponent() {
     const source = useRef(new VectorSource<Feature<Point>>());
-    const [ActiveProfileDisplay, setActiveProfileDisplay] = useState<ReactElement>()
-    const [ContributerTypes, setContributerTypes] = useState<culture_contributer_type[]>([])
+    const [ActiveProfileDisplay, setActiveProfileDisplay] = useState<ReactElement>();
     const [tooltipMapPoint, setTooltipMapPoint] = useState<{ id: number, mapPoint: MapPoint }>();
-    const [cPixel, setCPixel] = useState({ x: 0, y: 0 })
+    const [cPixel, setCPixel] = useState({ x: 0, y: 0 });
     const [ttVisible, setTtVisible] = useState(false);
+    const [filters, setFilters] = useSearchParam('ccFilters');
     const [cc, setCc] = useSearchParam("cc");
-    const map = useRef<Map>(new Map)
+    const map = useRef<Map>(new Map);
 
 
+
+    // updates displayed profile based on URL, listens for URL changes
     useEffect(() => {
-        fetch(getCcProfile(cc ? cc : ""))
-            .then(x => x.json())
-            .then((x) => {
-                const p = (x.data as culture_contributer_entry)?.attributes.Profile;
-                setActiveProfileDisplay(() => {
-                    const imgURLs = p?.gallery.data.map(x => getImageURL(x.attributes.url))
-                    return (
-                        <div id='pp' className='container'>
-                            <h1>{p?.title}</h1>
-                            <p>{p?.address}</p>
-                            <div className=''>{imgURLs ? <ImageSlider src={imgURLs} /> : ""}</div>
-                            <div>{p?.richtext.map(x => parseRichText(x))}</div>
-                        </div>
-                    )
-                })
-            });
+        if (cc) {
+            fetch(getCcProfile(cc))
+                .then(x => x.json())
+                .then((x) => {
+                    const p = (x.data as culture_contributer_entry)?.attributes.Profile;
+                    setActiveProfileDisplay(() => {
+                        const imgURLs = p?.gallery.data.map(x => getImageURL(x.attributes.url))
+                        return (
+                            <div id='pp' className='container'>
+                                <h1>{p?.title}</h1>
+                                <p>{p?.address}</p>
+                                <div className=''>{imgURLs ? <ImageSlider src={imgURLs} /> : ""}</div>
+                                <div>{p?.richtext.map(x => parseRichText(x))}</div>
+                            </div>
+                        )
+                    })
+                });
+        }
+
     }, [cc]);
 
 
 
-
-
     useEffect(() => {
+
+        function clickFunq(evt: MapBrowserEvent<any>) {
+            const pixel = map.current.getEventPixel(evt.originalEvent);
+            const x = map.current.getFeaturesAtPixel(pixel);
+            if (x.length == 1) {
+                var xx = x[0].getId()?.toString();
+                if (xx) {
+                    setCc(xx)
+                }
+            }
+        }
+        map.current.on('click', clickFunq);
+
+        return () => {
+            map.current.un('click', clickFunq);
+        }
+    }, [filters, map.current])
+
+
+    // generates map, loads once
+    useEffect(() => {
+
+        //console.log('onLoad', 'filters:', paramArrayParser(filters), 'cctypes:', ContributerTypes);
 
         const mapLayer = new TileLayer({
             preload: Infinity,
@@ -79,16 +102,7 @@ export function MapRowComponent() {
             }),
         });
 
-        map.current.on('click', function (evt) {
-            const pixel = map.current.getEventPixel(evt.originalEvent);
-            pointsLayer.getFeatures(pixel).then(x => {
-                if (x.length == 1) {
-                    setCc(x[0].getId() ?? "");
-                }
 
-                return;
-            });
-        });
 
         map.current.on('movestart', function (evt) {
             setTtVisible(false);
@@ -100,7 +114,7 @@ export function MapRowComponent() {
     }, []);
 
 
-
+    // mounts the on pointermove on the map components, listens for whether its own output (in the active tooltip) changes.
     useEffect(() => {
 
         function ttfunq(evt: MapBrowserEvent<any>) {
@@ -115,7 +129,6 @@ export function MapRowComponent() {
                 setCPixel({ x: cpixel[0], y: cpixel[1] });
 
 
-                console.log(tooltipMapPoint?.id, _id)
                 if (!tooltipMapPoint || _id !== tooltipMapPoint.id) {
                     fetch(getCcMapPoint(_id))
                         .then(x => x.json())
@@ -147,19 +160,24 @@ export function MapRowComponent() {
 
     }, [tooltipMapPoint])
 
+
+    //generates the features on the map(mapPoints) listents for changes in the filters
     useEffect(() => {
+        //console.log('in features getter', 'filters:', paramArrayParser(filters), 'cctypes:', ContributerTypes);
+
         fetch(getCcMapPoints())
             .then(x => x.json())
             .then(x => {
                 source.current.clear();
                 source.current.addFeatures(x.data
-                    .filter((x: culture_contributer_entry) => ContributerTypes.includes(x.attributes.tag))
+                    .filter((x: culture_contributer_entry) => {
+                        return paramArrayParser(filters)?.includes(x.attributes.tag);
+                    })
                     .map((x: culture_contributer_entry) => {
 
                         const feature = new Feature({
                             geometry: new Point(fromLonLat([x.attributes.MapPoint.longitude, x.attributes.MapPoint.lattitude])),
                         });
-                        feature.addEventListener('pointerleave', e => console.log(e));
                         feature.setId(x.id);
                         feature.setStyle(new Style({
                             image: new CircleStyle({
@@ -178,7 +196,7 @@ export function MapRowComponent() {
 
                     ));
             });
-    }, [ContributerTypes])
+    }, [filters])
 
 
     return (
@@ -188,27 +206,11 @@ export function MapRowComponent() {
                 <div id='filter' className='container p-2'>
 
                     <div>
-                        <input type="checkbox" id="ch1" name='test' onChange={(e) => {
-                            e.target.checked
-                                ? setContributerTypes((p) => [...ContributerTypes, 'venue'])
-                                : setContributerTypes(() => {
-                                    var x = ContributerTypes;
-                                    return x.filter(xx => xx !== 'venue');
-                                })
-                        }} />
-                        <label htmlFor="ch1">venues</label>
+                        {Checkbox('venue')}
                     </div>
 
                     <div>
-                        <input type="checkbox" id="ch2" onChange={(e) => {
-                            e.target.checked
-                                ? setContributerTypes((p) => [...ContributerTypes, 'youthHouse'])
-                                : setContributerTypes(() => {
-                                    var x = ContributerTypes;
-                                    return x.filter(xx => xx !== 'youthHouse');
-                                })
-                        }} />
-                        <label htmlFor="ch2">youth houses</label>
+                        {Checkbox('youthHouse')}
                     </div>
 
                 </div>
@@ -226,4 +228,34 @@ export function MapRowComponent() {
 
         </div>
     );
+
+    function Checkbox(ccType: culture_contributer_type) {
+        const [checked, setChecked] = useState<boolean>(paramArrayParser(filters)?.includes(ccType) ?? false);
+
+        useEffect(() => {
+            if (checked) {
+                var x = paramArrayParser(filters) ?? [];
+                if (!x?.includes(ccType)) {
+                    setFilters(paramArrayToString([...x, ccType]))
+                }
+            }
+            else {
+                var x = paramArrayParser(filters) ?? [];
+                setFilters(paramArrayToString(x.filter(xx => xx !== ccType)))
+            }
+
+        }, [checked])
+
+        return (
+            <label>
+                <input type="checkbox"
+                    defaultChecked={checked}
+                    onChange={(e) => setChecked(e.target.checked)}
+                />
+                {ccType}
+            </label>
+        );
+    }
+
 }
+

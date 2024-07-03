@@ -15,6 +15,7 @@ export function navbar() {
                 <Link to='/map' className="m-20 text-black hover:text-maincolor">MAP</Link>
                 <Link to='/about' className="m-20 text-black hover:text-maincolor">ABOUT</Link>
                 <Link to='/projects' className="m-20 text-black hover:text-maincolor">PROJECTS</Link>
+                <Link to='/backstage' className="m-20 text-black hover:text-maincolor">BACKSTAGE</Link>
 
 
             </div>
