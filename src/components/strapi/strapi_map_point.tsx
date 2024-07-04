@@ -7,17 +7,7 @@ export type MapPoint = {
     title: string,
     lattitude: number,
     longitude: number,
-    address: string,
     shortHook: string
-    image: {
-        name: string,
-        alternativeText: string,
-        url: string,
-        caption: string,
-        width: number,
-        height: number,
-        formats: any
-    }
 }
 
 export function MPTooltip(p: MapPoint) {

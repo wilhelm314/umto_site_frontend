@@ -171,7 +171,7 @@ export function MapRowComponent() {
                 source.current.clear();
                 source.current.addFeatures(x.data
                     .filter((x: culture_contributer_entry) => {
-                        return paramArrayParser(filters)?.includes(x.attributes.tag);
+                        return paramArrayParser(filters)?.includes(x.attributes.type);
                     })
                     .map((x: culture_contributer_entry) => {
 

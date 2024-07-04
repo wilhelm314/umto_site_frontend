@@ -39,12 +39,12 @@ export function getImageURL(path: string) {
 }
 
 export function getAboutPageURL() {
-    return new URL('api/about-page?populate[0]=rowComponent.columnComponent.gallery&populate[1]=rowComponent.columnComponent.backgroundImage', api_adress)
+    return new URL('api/about-page?populate[0]=row.column', api_adress)
 }
 
 export const collections: { [key: string]: URL } = {
     blogposts: new URL("api/blogposts", api_adress),
-    culture_contributers: new URL("api/culture-contributers?populate[0]=MapPoint&populate[1]=contactInformation.contactPerson&populate[2]=Profile.gallery", api_adress),
+    culture_contributers: new URL("api/culture-contributers?populate[0]=MapPoint&populate[1]=Profile.gallery&populate[2]=contactPeople", api_adress),
     tests: new URL("api/tests?populate=*", api_adress)
 
 };

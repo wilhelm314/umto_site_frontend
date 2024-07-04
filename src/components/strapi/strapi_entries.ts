@@ -45,41 +45,17 @@ export type gallery = {
     data: image_data[]
 }
 
-export type blogpost_entry = {
-    id: number,
-    attributes: {
-        Title: string,
-        createdAt: string,
-        updateAt: string,
-        publishedAt: string
-    }
-}
-
-export type test_entry = {
-    id: number,
-    attributes: {
-        richtext: rich_text_element[],
-        image: image,
-        gallery: gallery,
-        createdAt: string,
-        updateAt: string,
-        publishedAt: string
-    }
-}
-
 export type culture_contributer_type = "venue" | "youthHouse";
 
 export type column_component = {
     id: number,
     richtext: rich_text_element[],
     title: string,
-    gallery: gallery,
-    backroundImage: image
 }
 
 export type row_component = {
     id: number,
-    columnComponent: column_component[]
+    column: column_component[]
 }
 
 export type page_entry = {
@@ -88,14 +64,14 @@ export type page_entry = {
         createdAt: string,
         updateAt: string,
         publishedAt: string,
-        rowComponent: row_component[]
+        row: row_component[]
     }
 }
 
 export type culture_contributer_entry = {
     id: number,
     attributes: {
-        tag: culture_contributer_type,
+        type: culture_contributer_type,
         createdAt: string,
         updateAt: string,
         publishedAt: string,
@@ -108,10 +84,9 @@ export type culture_contributer_entry = {
             address: string
             gallery: gallery
         },
-        ContactInformation: {
-            id: number,
-            Contacts: { id: number, name: string, role: string, email: string, phone: string }[]
-        }
+
+        contactPeople: { id: number, name: string, role: string, email: string, phone: string }[]
+
     }
 }
 

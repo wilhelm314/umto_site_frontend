@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './App.css';
 import { MapRowComponent } from './components/map/map_component';
 import { navbar } from './components/navbar';
-import { blogpost_entry, page_entry, test_entry } from './components/strapi/strapi_entries';
+import { page_entry } from './components/strapi/strapi_entries';
 import { collections, getAboutPageURL, getImageURL } from './components/strapi/strapi_interface';
 import { parseRichText } from './components/strapi/strapi_rich_text';
 import { AboutPage } from './pages/about';
