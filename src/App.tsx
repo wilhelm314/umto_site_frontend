@@ -10,7 +10,7 @@ import SignIn, { GoogleAuthCallback } from './components/auth/signin';
 import { AuthContext, useAuthContext } from './context/authContext';
 import { Button } from 'antd';
 import { Profile } from './pages/profile';
-import { RenderProject } from './pages/projects';
+import { Projects, RenderProject } from './pages/projects';
 
 
 
@@ -28,7 +28,7 @@ function App() {
         <Route path='/map' element={<MapRowComponent />}></Route>
         <Route path='/about' element={<AboutPage />}></Route>
         <Route path='/projects' >
-          <Route index element={<>projects</>}></Route>
+          <Route index element={<Projects />}></Route>
           <Route path=':id' element={<RenderProject />}></Route>
         </Route>
         <Route path='/backstage'>

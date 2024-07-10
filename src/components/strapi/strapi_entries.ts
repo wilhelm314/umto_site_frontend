@@ -93,7 +93,7 @@ export type public_project_entry = {
                 data: user_relation
             }
             roleDescription: rich_text_element[]
-        }
+        }[]
     }
 }
 
@@ -108,7 +108,7 @@ export type member_project_entry = {
                 data: user_relation
             },
             roleDescription: rich_text_element[]
-        }
+        }[]
         externalLinks: {
             title: string,
             link: string,

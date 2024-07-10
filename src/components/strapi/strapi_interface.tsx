@@ -27,12 +27,16 @@ export function getProject(id: number | string) {
     return new URL(`api/projects/${id}`, api_adress)
 }
 
+export function getProjects() {
+    return new URL(`api/projects`, api_adress)
+}
+
 export function getPublicProject(id: number | string) {
     return new URL(`api/projects/${id}?populate[0]=publicProject.leaders.user&populate[1]=publicProject.description&populate[2]=users`, api_adress)
 }
 
 export function getMemberProject(id: number | string) {
-    return new URL(`api/projects/?populate[0]=memberProject.torveholdere.user&populate[1]=memberProject.description&populate[2]=memberProject.externalLinks${id}`, api_adress)
+    return new URL(`api/projects/${id}?populate[0]=memberProject.torveholdere.user&populate[1]=memberProject.description&populate[2]=memberProject.externalLinks${id}`, api_adress)
 }
 
 
