@@ -1,15 +1,16 @@
 import React, { createContext, useContext } from "react";
-import { user } from '../components/strapi/strapi_entries'
-
+import { user_entry } from '../components/strapi/strapi_entries'
 
 export const AuthContext = createContext<{
-    user: undefined | user,
+    user: user_entry | undefined,
+    token: string | null,
     isLoading: boolean,
-    setUser: any
+    setToken: (token: null | string) => void
 }>({
     user: undefined,
+    token: null,
     isLoading: false,
-    setUser: (user: any) => { },
+    setToken: (token: null | string) => { }
 });
 
 export const useAuthContext = () => useContext(AuthContext);

@@ -13,7 +13,6 @@ export function AboutPage() {
         fetch(getAboutPageURL())
             .then(x => x.json())
             .then(x => {
-                console.log(x);
                 return set_about_page(x.data as page_entry);
             })
     }, [])
