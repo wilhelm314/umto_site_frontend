@@ -40,8 +40,12 @@ export function getMemberProject(id: number | string) {
 }
 
 
-export function getTrophy(id: number) {
+export function getTrophy(id: number | string) {
     return new URL(`api/trophies/${id}`, api_adress)
+}
+
+export function getTrophies() {
+    return new URL(`api/trophies`, api_adress)
 }
 
 export function getAboutPageURL() {

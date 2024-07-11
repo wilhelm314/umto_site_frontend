@@ -19,6 +19,20 @@ const projects = (user: user_entry) => {
     )
 }
 
+const trophies = (user: user_entry) => {
+    return (
+        <div className="container p-2 mx-auto max-w-full grid grid-cols-3 m-2">
+            {user?.trophies?.map(x => {
+                return (
+                    <div className='p-1 m-2' key={x.id}>
+                        <a className="m-1 hover:text-maincolor" key={'3'} href={'/trophies/' + x.id}>{x.title}</a>
+                    </div>
+                )
+            })}
+        </div>
+    )
+}
+
 
 export const Profile = () => {
     const navigate = useNavigate()
@@ -37,10 +51,13 @@ export const Profile = () => {
                                 <div key={2} className="container p-4">
                                     <div className="container max-w-xl">
                                         <div key={1} className="text-xl font-semibold">PROJEKTER</div>
-                                        <div key={2}>
-                                            {projects(user)}
-                                        </div>
+                                        <div key={2}> {projects(user)}</div>
                                     </div>
+                                    <div key={3} className="container max-w-xl">
+                                        <div className="text-xl font-semibold">TROFÆER</div>
+                                        <div>{trophies(user)}</div>
+                                    </div>
+
                                 </div>
 
                             </div>

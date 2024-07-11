@@ -11,6 +11,7 @@ import { AuthContext, useAuthContext } from './context/authContext';
 import { Button } from 'antd';
 import { Profile } from './pages/profile';
 import { Projects, RenderProject } from './pages/projects';
+import { RenderTrophy, Trophies } from './pages/trophies';
 
 
 
@@ -27,6 +28,10 @@ function App() {
         <Route path='/' element={<>{user?.id}</>}></Route>
         <Route path='/map' element={<MapRowComponent />}></Route>
         <Route path='/about' element={<AboutPage />}></Route>
+        <Route path='/trophies'>
+          <Route index element={<Trophies />}></Route>
+          <Route path=':id' element={<RenderTrophy />}></Route>
+        </Route>
         <Route path='/projects' >
           <Route index element={<Projects />}></Route>
           <Route path=':id' element={<RenderProject />}></Route>
