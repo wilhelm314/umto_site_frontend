@@ -39,7 +39,6 @@ const AuthProvider: React.FC<AuthProverProps> = ({ children }) => {
     };
 
     useEffect(() => {
-        console.log('i ran', token)
         if (token)
             localStorage.setItem(AUTH_TOKEN, token);
         else

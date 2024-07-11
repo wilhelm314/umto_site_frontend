@@ -15,6 +15,7 @@ import { MPTooltip, MapPoint } from '../strapi/strapi_map_point';
 import { ImageSlider } from '../ImageSlider';
 import { parseRichText } from '../strapi/strapi_rich_text';
 import { paramArrayParser, paramArrayToString, useSearchParam } from '../SearchParamManager';
+import { networkInterfaces } from 'os';
 
 
 
@@ -115,9 +116,19 @@ export function MapRowComponent() {
 
 
     // mounts the on pointermove on the map components, listens for whether its own output (in the active tooltip) changes.
+    const [ttId, setTtId] = useState<number>()
     useEffect(() => {
-
+        if (ttId) {
+            fetch(getCcMapPoint(ttId))
+                .then(x => x.json())
+                .then(x => x.data as culture_contributer_entry)
+                .then(x => { setTooltipMapPoint({ id: ttId, mapPoint: x.attributes.MapPoint }) })
+                .finally(() => setTtVisible(true))
+        }
+    }, [ttId])
+    useEffect(() => {
         function ttfunq(evt: MapBrowserEvent<any>) {
+
             const pixel = map.current.getEventPixel(evt.originalEvent);
             const x = map.current.getFeaturesAtPixel(pixel);
 
@@ -128,32 +139,21 @@ export function MapRowComponent() {
                 const cpixel = map.current.getPixelFromCoordinate(pcoord);
                 setCPixel({ x: cpixel[0], y: cpixel[1] });
 
-
-                if (!tooltipMapPoint || _id !== tooltipMapPoint.id) {
-                    fetch(getCcMapPoint(_id))
-                        .then(x => x.json())
-                        .then((x) => {
-                            const xx = x.data as culture_contributer_entry;
-                            setTooltipMapPoint({ id: _id, mapPoint: xx.attributes.MapPoint });
-                        }).then(() => setTtVisible(true))
-
+                if (!tooltipMapPoint || _id != tooltipMapPoint.id) {
+                    setTtId(_id)
                 } else {
                     setTtVisible(true);
                 }
-
-
-
-
 
             } else {
                 setTtVisible(false);
                 map.current.getTargetElement().style.cursor = 'auto';
             }
 
-
         }
-        map.current.on('pointermove', ttfunq);
 
+
+        map.current.on('pointermove', ttfunq);
         return () => {
             map.current.un('pointermove', ttfunq);
         }

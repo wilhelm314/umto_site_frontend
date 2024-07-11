@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react';
 import './App.css';
 import { MapRowComponent } from './components/map/map_component';
 import { navbar } from './components/navbar';
 import { AboutPage } from './pages/about';
-import * as ReactDOM from "react-dom/client";
 import { Routes, Route } from 'react-router-dom';
 import { BackstageHeader } from './components/backstage/backstageHeader';
 import SignIn, { GoogleAuthCallback } from './components/auth/signin';
-import { AuthContext, useAuthContext } from './context/authContext';
-import { Button } from 'antd';
+import { useAuthContext } from './context/authContext';
 import { Profile } from './pages/profile';
 import { Projects, RenderProject } from './pages/projects';
 import { RenderTrophy, Trophies } from './pages/trophies';
