@@ -11,7 +11,7 @@ const projects = (user: user_entry) => {
             {user?.projects?.map(x => {
                 return (
                     <div className='p-1 m-2' key={x.id}>
-                        <a className="m-1 hover:text-maincolor" key={'3'} href={'/projects/' + x.id}>{x.title}</a>
+                        <a className="m-1 hover:text-red" key={'3'} href={'/projects/' + x.id}>{x.title}</a>
                     </div>
                 )
             })}
@@ -25,7 +25,7 @@ const trophies = (user: user_entry) => {
             {user?.trophies?.map(x => {
                 return (
                     <div className='p-1 m-2' key={x.id}>
-                        <a className="m-1 hover:text-maincolor" key={'3'} href={'/trophies/' + x.id}>{x.title}</a>
+                        <a className="m-1 hover:text-red" key={'3'} href={'/trophies/' + x.id}>{x.title}</a>
                     </div>
                 )
             })}

@@ -126,6 +126,8 @@ export function MapRowComponent() {
                 .finally(() => setTtVisible(true))
         }
     }, [ttId])
+
+
     useEffect(() => {
         function ttfunq(evt: MapBrowserEvent<any>) {
 

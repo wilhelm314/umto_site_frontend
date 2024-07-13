@@ -6,12 +6,15 @@ module.exports = {
   theme: {
     extend: {},
     colors: {
-      'white': '#FFFFFF',
-      'grey': '#F5F5F5',
-      'black': '#211C1D',
-      'maincolor': '#FF4747',
-      'secondcolor': '#F25F5C'
+      'white': '#EFEFEF',
+      'lightgrey': '#BFBFBF',
+      'grey': '#8F8F8F',
+      'darkgrey': '#484848',
+      'black': '#27252B',
+      'red': '#FF4035',
+      'green': '#0F7333',
+      'blue': '#5146F4'
     }
   },
   plugins: [],
-}
+};

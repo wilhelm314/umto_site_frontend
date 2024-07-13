@@ -39,7 +39,6 @@ export function getMemberProject(id: number | string) {
     return new URL(`api/projects/${id}?populate[0]=memberProject.torveholdere.user&populate[1]=memberProject.description&populate[2]=memberProject.externalLinks${id}`, api_adress)
 }
 
-
 export function getTrophy(id: number | string) {
     return new URL(`api/trophies/${id}`, api_adress)
 }

@@ -47,7 +47,7 @@ export const Trophies = () => {
                     <div>
                         {x.map(xx => {
                             return (
-                                <a key={xx.id} className="m-1 hover:text-maincolor" href={'/projects/' + xx.id}>{xx.attributes.title}</a>
+                                <a key={xx.id} className="m-1 hover:text-red" href={'/trophies/' + xx.id}>{xx.attributes.title}</a>
                             )
                         })}
                     </div>
