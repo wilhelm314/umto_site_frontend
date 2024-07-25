@@ -51,6 +51,10 @@ export function getAboutPageURL() {
     return new URL('api/about-page?populate[0]=row.column', api_adress)
 }
 
+export function getFrontPageURL() {
+    return new URL('api/frontpage?populate[0]=row.column&populate[1]=row.image', api_adress)
+}
+
 export function getUserTrophies(id: number) {
     return new URL(`api/users/${id}?populate[0]=trophies`, api_adress)
 }

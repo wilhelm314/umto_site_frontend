@@ -124,6 +124,7 @@ export type member_project_entry = {
 export type project_entry = {
     id: number,
     attributes: {
+        isUpcoming: boolean,
         createdAt: string,
         publishedAt: string,
         updatedAt: string,

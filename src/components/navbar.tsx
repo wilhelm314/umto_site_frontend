@@ -23,7 +23,7 @@ export function Navbar() {
 
 
     return (
-        <div key="nav1" className="container bg-white mx-auto max-w-full h-28 p-2 font-Consolas text-2xl flex justify-center items-center	">
+        <div key="nav1" className="top-0 fixed container bg-white mx-auto max-w-full h-28 p-2 font-Consolas text-2xl flex justify-center items-center	">
 
             <div className="text-left mx-auto ">
                 <img src={getImageURL(navbarData?.attributes.logo.data.attributes.url ?? "").toString()} alt="" className="max-w-full max-h-full hover:cursor-pointer	" onClick={() => navigate('/')} />

@@ -1,8 +1,8 @@
 import { ReactElement, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getTrophies, getTrophy } from "../components/strapi/strapi_interface";
-import { trophy_entry } from "../components/strapi/strapi_entries";
-import { parseRichText } from "../components/strapi/strapi_rich_text";
+import { getTrophies, getTrophy } from "./strapi/strapi_interface";
+import { trophy_entry } from "./strapi/strapi_entries";
+import { parseRichText } from "./strapi/strapi_rich_text";
 
 
 export const RenderTrophy = () => {

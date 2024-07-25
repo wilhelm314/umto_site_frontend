@@ -1,10 +1,10 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { BEARER, getMemberProject, getProject, getPublicProject, getProjects } from "../components/strapi/strapi_interface";
-import { project_entry } from "../components/strapi/strapi_entries";
+import { BEARER, getMemberProject, getProject, getPublicProject, getProjects } from "./strapi/strapi_interface";
+import { project_entry } from "./strapi/strapi_entries";
 import { useAuthContext } from "../context/authContext";
 import { JsxElement } from "typescript";
-import { parseRichText } from "../components/strapi/strapi_rich_text";
+import { parseRichText } from "./strapi/strapi_rich_text";
 
 
 export const RenderProject = () => {
