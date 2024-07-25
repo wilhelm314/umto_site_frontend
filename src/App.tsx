@@ -1,6 +1,6 @@
 import './App.css';
 import { MapRowComponent } from './components/map/map_component';
-import { navbar } from './components/navbar';
+import { Navbar } from './components/navbar';
 import { AboutPage } from './pages/about';
 import { Routes, Route } from 'react-router-dom';
 import { BackstageHeader } from './components/backstage/backstageHeader';
@@ -19,7 +19,7 @@ function App() {
 
   return (
     <>
-      {navbar()}
+      {Navbar()}
       <Routes>
         <Route path='/api/auth/google/callback' element={<GoogleAuthCallback />}></Route>
         <Route path='/' element={<>{user?.id}</>}></Route>

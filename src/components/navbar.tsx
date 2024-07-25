@@ -1,26 +1,47 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { navbar_entry } from "./strapi/strapi_entries";
+import { getImageURL, getNavbar } from "./strapi/strapi_interface";
 
-export function navbar() {
+export function Navbar() {
+
+    const [navbarData, setNavbarData] = useState<navbar_entry>()
+    const navigate = useNavigate()
+
+
+    useEffect(() => {
+        fetch(getNavbar())
+            .then(x => x.json())
+            .then(x => x.data as navbar_entry)
+            .then(x => {
+                setNavbarData(x);
+            })
+    }, [])
 
 
 
 
 
     return (
-        <div key="nav1" className="container bg-lightgrey mx-auto max-w-full p-5 font-Consolas text-2xl font-bold ">
-            <div className="mx-10 max-w-full text-right	tracking-wider antialiased">
+        <div key="nav1" className="container bg-white mx-auto max-w-full h-28 p-2 font-Consolas text-2xl flex justify-center items-center	">
 
-                <Link to='/' className="m-20 text-black hover:text-blue">HOME</Link>
-                <Link to='/map' className="m-20 text-black hover:text-blue">MAP</Link>
-                <Link to='/about' className="m-20 text-black hover:text-blue">ABOUT</Link>
-                <Link to='/projects' className="m-20 text-black hover:text-blue">PROJECTS</Link>
-                <Link to='/backstage' className="m-20 text-black hover:text-blue">BACKSTAGE</Link>
+            <div className="text-left mx-auto ">
+                <img src={getImageURL(navbarData?.attributes.logo.data.attributes.url ?? "").toString()} alt="" className="max-w-full max-h-full hover:cursor-pointer	" onClick={() => navigate('/')} />
+            </div>
 
+            <div className="text-center mx-auto h-full flex items-center">
+                <Link to='/projects' className="mx-4 text-black hover:text-red">Events</Link>
+                <Link to='/map' className="mx-4 text-black hover:text-red">Community</Link>
+                <Link to='/about' className="mx-4 text-black hover:text-red">Organisation</Link>
+            </div>
 
+            <div className="text-right mx-auto h-full flex items-center">
+                <Link to='/backstage' className="mx-4 text-black hover:text-red">Log Ind</Link>
+                <Link to='/contact' className=" mx-4 text-black hover:text-red">Kontakt</Link>
             </div>
 
         </div>
+
     )
 
 }

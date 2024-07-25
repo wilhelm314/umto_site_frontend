@@ -184,6 +184,8 @@ export type column_component = {
 export type row_component = {
     id: number,
     column: column_component[]
+    image: image,
+    title: string
 }
 
 export type page_entry = {
@@ -193,6 +195,28 @@ export type page_entry = {
         updateAt: string,
         publishedAt: string,
         row: row_component[]
+    }
+}
+
+export type footer_entry = {
+    id: number,
+
+    attributes: {
+        title: string,
+        createdAt: string,
+        updateAt: string,
+        publishedAt: string,
+        row: row_component[]
+    }
+}
+
+export type navbar_entry = {
+    id: number,
+    attributes: {
+        createdAt: string,
+        updateAt: string,
+        publishedAt: string,
+        logo: image
     }
 }
 

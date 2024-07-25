@@ -59,6 +59,10 @@ export function getUser(id: number) {
     return new URL(`api/users/${id}?populate[0]=profilePicture&populate[1]=projects&populate[2]=trophies`, api_adress)
 }
 
+export function getNavbar() {
+    return new URL('api/navbar?populate[0]=logo', api_adress)
+}
+
 export const collections: { [key: string]: URL } = {
     cultureContributers: new URL("api/culture-contributers?populate[0]=MapPoint&populate[1]=Profile.gallery&populate[2]=contactPeople", api_adress),
     users: new URL('api/users?populate[0]=profilePicture&populate[1]=projects&populate[2]=trophies', api_adress),
