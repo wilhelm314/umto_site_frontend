@@ -45,12 +45,11 @@ export function MapRowComponent() {
                 .then((x) => {
                     const p = (x.data as culture_contributer_entry)?.attributes.Profile;
                     setActiveProfileDisplay(() => {
-                        const imgURLs = p?.gallery.data.map(x => getImageURL(x.attributes.url))
                         return (
                             <div id='pp' className='container'>
                                 <h1>{p?.title}</h1>
                                 <p>{p?.address}</p>
-                                <div className=''>{imgURLs ? <ImageSlider src={imgURLs} /> : ""}</div>
+                                <img src={getImageURL(p.image.data.attributes.url).toString()} alt="" />
                                 <div>{p?.richtext.map(x => parseRichText(x))}</div>
                             </div>
                         )
@@ -171,10 +170,9 @@ export function MapRowComponent() {
             .then(x => x.json())
             .then(x => {
                 source.current.clear();
-                source.current.addFeatures(x.data
-                    .filter((x: culture_contributer_entry) => {
-                        return paramArrayParser(filters)?.includes(x.attributes.type);
-                    })
+                source.current.addFeatures(x.data.filter((x: culture_contributer_entry) => {
+                    return paramArrayParser(filters)?.includes(x.attributes.type);
+                })
                     .map((x: culture_contributer_entry) => {
 
                         const feature = new Feature({
@@ -202,7 +200,7 @@ export function MapRowComponent() {
 
 
     return (
-        <div key="m1" className='container p-10 mx-auto max-w-full flex flex-row'>
+        <div key="m1" className='bg-white container p-10 mx-auto max-w-full flex flex-row'>
             <div className='basis-1/2 p-2 m-4'>
 
                 <div id='filter' className='container p-2'>

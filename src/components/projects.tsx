@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { BEARER, getMemberProject, getProject, getPublicProject, getProjects } from "./strapi/strapi_interface";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { BEARER, getMemberProject, getProject, getPublicProject, getProjects, getImageURL } from "./strapi/strapi_interface";
 import { project_entry } from "./strapi/strapi_entries";
 import { useAuthContext } from "../context/authContext";
 import { JsxElement } from "typescript";
@@ -97,23 +97,98 @@ export const RenderProject = () => {
     )
 }
 
-export const Projects = () => {
-
+export const UpcomingProjectsProjectspage = () => {
+    const navigate = useNavigate()
     const [projects, setProjects] = useState<ReactElement<any>>()
 
     useEffect(() => {
         fetch(getProjects())
             .then(x => x.json())
             .then(x => x.data as project_entry[])
+            .then(x => x.filter(x => x.attributes.isUpcoming))
             .then(x => {
                 setProjects(
-                    <div>
-                        {x.map(xx => {
-                            return (
-                                <a key={xx.id} className="m-1 hover:text-red" href={'/projects/' + xx.id}>{xx.attributes.title}</a>
-                            )
-                        })}
-                    </div>
+                    <div className="w-full bg-white m-2">
+                        <div className="text-6xl font-bold text-red text-center">Eventkalender</div>
+                        <div className={`m-4 p-4 mx-auto grid grid-cols-${window.screen.width > 1400 ? '3' : '1'} gap-4 w-10/12 justify-top items-top`}>
+                            {x.map(xx => {
+                                return (
+                                    <div className="p-2">
+                                        <div className="container rounded drop-shadow-2xl">
+                                            <div className="flex justify-center items-center">
+                                                <img className="w-fit" src={getImageURL(xx.attributes.thumbnail.data.attributes.url ?? "").toString()} alt="" />
+                                            </div>
+                                            <div className="p-4">
+                                                <div className="tracking-wider font-light text-red text-md">{xx.attributes.subtitle}</div>
+                                                <div className="font-bold text-xl text-red">{xx.attributes.title}</div>
+                                                <div>{xx.attributes.shortHook}</div>
+                                                <div className="flex justify-center items-center my-5">
+                                                    <div className="align-center text-sm text-center w-1/4 text-red font-light rounded-lg outline-red outline outline-1 hover:text-red cursor-pointer" onClick={() => navigate('/projects/' + xx.id)}>INFO</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                )
+                            })}
+                        </div>
+                    </div >
+
+                )
+            })
+    }, [])
+
+    return (
+        <div>
+            {projects}
+        </div>
+    )
+}
+
+export const UpcomingProjectsFrontpage = () => {
+    const navigate = useNavigate()
+    const [projects, setProjects] = useState<ReactElement<any>>()
+
+    useEffect(() => {
+        fetch(getProjects())
+            .then(x => x.json())
+            .then(x => x.data as project_entry[])
+            .then(x => x.filter(x => x.attributes.isUpcoming))
+            .then(x => {
+                setProjects(
+                    <div className="w-full bg-white py-20 z-0">
+                        <div className="text-xl my-3 font text-red text-center">EVENTS</div>
+                        <div className="text-3xl font-bold text-red text-center">Coming up..</div>
+                        <div className={`m-4 p-4 mx-auto grid grid-cols-${window.screen.width > 1400 ? '3' : '1'} gap-4 w-10/12 justify-top items-top`}>
+                            {x.map(xx => {
+                                return (
+                                    <div className="p-2">
+                                        <div className="container rounded drop-shadow-2xl">
+                                            <div className="flex justify-center items-center">
+                                                <img className="w-fit" src={getImageURL(xx.attributes.thumbnail.data.attributes.url ?? "").toString()} alt="" />
+                                            </div>
+                                            <div className="p-4">
+                                                <div className="tracking-wider font-light text-red text-md">{xx.attributes.subtitle}</div>
+                                                <div className="font-bold text-xl text-red">{xx.attributes.title}</div>
+                                                <div>{xx.attributes.shortHook}</div>
+                                                <div className="flex justify-center items-center my-5">
+                                                    <div className="align-center text-sm text-center w-1/4 text-red font-light rounded-lg outline-red outline outline-1 hover:text-red cursor-pointer" onClick={() => navigate('/projects/' + xx.id)}>INFO</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                )
+                            })}
+                        </div>
+
+                        <div className="flex justify-center item-center text-center">
+                            <Link className="text-6xl font-light text-red text-center hover:cursor-pointer" to='/projects'>SE FLERE EVENTS</Link>
+                        </div>
+
+
+                    </div >
+
                 )
             })
     }, [])

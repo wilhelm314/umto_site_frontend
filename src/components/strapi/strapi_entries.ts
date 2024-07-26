@@ -28,7 +28,10 @@ type user_project_relation = {
     createdAt: string,
     updatedAt: string,
     publishedAt: string,
-    title: string
+    title: string,
+    subtitle: string,
+    shortHook: string,
+    thumbnail: image,
 }
 
 type user_trophy_relation = {
@@ -129,6 +132,9 @@ export type project_entry = {
         publishedAt: string,
         updatedAt: string,
         title: string,
+        subtitle: string,
+        shortHook: string,
+        thumbnail: image,
         users: user_relation[],
         publicProject: {
             data: public_project_entry
@@ -234,8 +240,8 @@ export type culture_contributer_entry = {
             id: number,
             title: string,
             richtext: rich_text_element[],
-            address: string
-            gallery: gallery
+            address: string,
+            image: image
         },
 
         contactPeople: { id: number, name: string, role: string, email: string, phone: string }[]

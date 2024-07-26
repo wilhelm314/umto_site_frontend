@@ -8,7 +8,7 @@ export const api_adress = 'http://localhost:1337'
 // all URLs are with full populates
 
 export function getCcProfile(id: number | string) {
-    return new URL(`api/culture-contributers/${id}?populate[0]=Profile.gallery`, api_adress)
+    return new URL(`api/culture-contributers/${id}?populate[0]=Profile.image`, api_adress)
 }
 
 export function getCcMapPoints() {
@@ -24,11 +24,11 @@ export function getImageURL(path: string) {
 }
 
 export function getProject(id: number | string) {
-    return new URL(`api/projects/${id}`, api_adress)
+    return new URL(`api/projects/${id}?populate[0]=thumbnail`, api_adress)
 }
 
 export function getProjects() {
-    return new URL(`api/projects`, api_adress)
+    return new URL(`api/projects?populate[0]=thumbnail`, api_adress)
 }
 
 export function getPublicProject(id: number | string) {
