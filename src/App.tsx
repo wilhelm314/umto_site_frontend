@@ -30,7 +30,13 @@ function App() {
           <Route path='/nav' element={<Navpage />}></Route>
           <Route path='/api/auth/google/callback' element={<GoogleAuthCallback />}></Route>
           <Route path='/' element={<Frontpage />}></Route>
-          <Route path='/community' element={<MapRowComponent />}></Route>
+          <Route path='/community' >
+            <Route index element={<MapRowComponent />}></Route>
+            <Route path='cc'>
+              <Route path=':id'></Route>
+            </Route>
+
+          </Route>
           <Route path='/about' element={<AboutPage />}></Route>
           <Route path='/trophies'>
             <Route index element={<Trophies />}></Route>

@@ -239,7 +239,7 @@ export type culture_contributer_entry = {
         Profile: {
             id: number,
             title: string,
-            richtext: rich_text_element[],
+            shortHook: string,
             address: string,
             image: image
         },
