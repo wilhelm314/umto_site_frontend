@@ -12,7 +12,6 @@ import { getCcMapPoint, getCcMapPoints, getImageURL } from '../strapi/strapi_int
 import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style.js';
 import { getCcProfile } from '../strapi/strapi_interface';
 import { MPTooltip, MapPoint } from '../strapi/strapi_map_point';
-import { ImageSlider } from '../ImageSlider';
 import { parseRichText } from '../strapi/strapi_rich_text';
 import { paramArrayParser, paramArrayToString, useSearchParam } from '../SearchParamManager';
 import { networkInterfaces } from 'os';
@@ -145,37 +144,38 @@ export function MapRowComponent() {
     //generates the features on the map(mapPoints) listents for changes in the filters
     useEffect(() => {
         //console.log('in features getter', 'filters:', paramArrayParser(filters), 'cctypes:', ContributerTypes);
+        // filter feature to be recoded here
 
         fetch(getCcMapPoints())
             .then(x => x.json())
+            .then(x => x.data as culture_contributer_entry[])
             .then(x => {
                 source.current.clear();
-                source.current.addFeatures(x.data.filter((x: culture_contributer_entry) => {
-                    return paramArrayParser(filters)?.includes(x.attributes.type);
-                })
-                    .map((x: culture_contributer_entry) => {
+                source.current.addFeatures(x.map((x: culture_contributer_entry) => {
 
-                        const feature = new Feature({
-                            geometry: new Point(fromLonLat([x.attributes.MapPoint.longitude, x.attributes.MapPoint.lattitude])),
-                        });
-                        feature.setId(x.id);
-                        feature.setStyle(new Style({
-                            image: new CircleStyle({
-                                radius: 7,
-                                fill: new Fill({
-                                    color: '#FFFFFF'
-                                }),
-                                stroke: new Stroke({
-                                    color: '#FF4747',
-                                    width: 2
-                                }),
-                            })
-                        }))
-                        return feature
-                    }
+                    const feature = new Feature({
+                        geometry: new Point(fromLonLat([x.attributes.MapPoint.longitude, x.attributes.MapPoint.lattitude])),
+                    });
+                    feature.setId(x.id);
+                    feature.setStyle(new Style({
+                        image: new CircleStyle({
+                            radius: 7,
+                            fill: new Fill({
+                                color: '#FFFFFF'
+                            }),
+                            stroke: new Stroke({
+                                color: '#FF4747',
+                                width: 2
+                            }),
+                        })
+                    }))
+                    return feature
+                }
 
-                    ));
+                ));
             });
+
+
     }, [filters])
 
     // updates displayed profile based on URL, listens for URL changes
@@ -220,21 +220,13 @@ export function MapRowComponent() {
 
     return (
         window.screen.width / window.screen.height < 2 / 3 ?
-            <div style={{ minHeight: '100vh' }} className='flex flex-col justify-center align-center'>
-                <div key="m1" style={{ boxShadow: '0 0 25px -5px rgb(0 0 0 / 0.1)' }} className='bg-white container p-10 mx-auto h-fit w-fit grid grid-rows-2 gap-5 p-8'>
+            <div style={{ height: '100vh' }} className='flex flex-col justify-center align-center'>
+                <div key="m1" style={{ boxShadow: '0 0 25px -5px rgb(0 0 0 / 0.1)' }} className='bg-white container p-10 mx-auto h-full w-full grid grid-rows-2 gap-5 p-8'>
                     <div className='p-2 m-4 h-full w-full flex flex-row p-2'>
 
-                        <div id='filter' className='container p-2 basis-1/6'>
-                            <div>
-                                {Checkbox('venue')}
-                            </div>
 
-                            <div>
-                                {Checkbox('youthHouse')}
-                            </div>
-                        </div>
 
-                        <div id="map" className="map-container relative h-full w-full basis-5/6">
+                        <div id="map" className="map-container relative h-full w-full">
                             <div id='tooltip' style={{ top: `${cPixel.y}px`, left: `${cPixel.x}px`, visibility: ttVisible ? 'visible' : 'hidden' }} className={'absolute z-50 -translate-y-[120%] h-30 w-40 -translate-x-1/2 pointer-events-none'}>{tooltipMapPoint ? MPTooltip(tooltipMapPoint.mapPoint) : ""}</div>
                         </div>
 
@@ -259,15 +251,7 @@ export function MapRowComponent() {
 
 
                     <div className='basis-1/2 p-2 m-4 flex flex-col p-2'>
-                        <div id='filter' className='container p-2'>
-                            <div>
-                                {Checkbox('venue')}
-                            </div>
 
-                            <div>
-                                {Checkbox('youthHouse')}
-                            </div>
-                        </div>
 
                         <div id="map" className="map-container relative h-full w-full">
                             <div id='tooltip' style={{ top: `${cPixel.y}px`, left: `${cPixel.x}px`, visibility: ttVisible ? 'visible' : 'hidden' }} className={'absolute z-50 -translate-y-[120%] h-30 w-40 -translate-x-1/2 pointer-events-none'}>{tooltipMapPoint ? MPTooltip(tooltipMapPoint.mapPoint) : ""}</div>
@@ -281,6 +265,18 @@ export function MapRowComponent() {
     );
 
     function Checkbox(ccType: culture_contributer_type) {
+        // filter html: <div id='filter' className='container p-2'>
+        //     <div>
+        //         {Checkbox('venue')}
+        //     </div>
+
+        //     <div>
+        //         {Checkbox('youthHouse')}
+        //     </div>
+        // </div>
+
+
+
         const [checked, setChecked] = useState<boolean>(paramArrayParser(filters)?.includes(ccType) ?? false);
 
         useEffect(() => {

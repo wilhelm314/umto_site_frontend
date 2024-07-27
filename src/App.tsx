@@ -7,10 +7,12 @@ import { BackstageHeader } from './components/backstage/backstageHeader';
 import SignIn, { GoogleAuthCallback } from './components/auth/signin';
 import { useAuthContext } from './context/authContext';
 import { Profile } from './pages/profilepage';
-import { UpcomingProjectsFrontpage, RenderProject } from './components/projects';
+import { UpcomingProjectsFrontpage, Project, UpcomingProjectsProjectspage } from './components/projects';
 import { RenderTrophy, Trophies } from './components/trophies';
 import { Frontpage } from './pages/frontpage';
 import { Navpage } from './pages/mobilenavpage';
+import { Footer } from './components/footer';
+import { SmukBusMap } from './components/map/smuk_bus_map';
 
 
 
@@ -24,27 +26,26 @@ function App() {
       <div className='z-50 relative'>{Navbar()}</div>
 
 
-
-      <div className='mt-28'>
+      <div className={'mt-28  bg-white ' + `${window.screen.width / window.screen.height < 2 / 3 ? '' : 'px-28'}`}>
         <Routes>
           <Route path='/nav' element={<Navpage />}></Route>
           <Route path='/api/auth/google/callback' element={<GoogleAuthCallback />}></Route>
           <Route path='/' element={<Frontpage />}></Route>
           <Route path='/community' >
-            <Route index element={<MapRowComponent />}></Route>
+            <Route index ></Route>
             <Route path='cc'>
               <Route path=':id'></Route>
             </Route>
 
           </Route>
-          <Route path='/about' element={<AboutPage />}></Route>
+          <Route path='/organisation' element={<AboutPage />}></Route>
           <Route path='/trophies'>
             <Route index element={<Trophies />}></Route>
             <Route path=':id' element={<RenderTrophy />}></Route>
           </Route>
           <Route path='/projects' >
-            <Route index element={<UpcomingProjectsFrontpage />}></Route>
-            <Route path=':id' element={<RenderProject />}></Route>
+            <Route index element={<UpcomingProjectsProjectspage />}></Route>
+            <Route path=':id' element={<Project />}></Route>
           </Route>
           <Route path='/backstage'>
             <Route index element={<BackstageHeader />}></Route>
@@ -56,7 +57,7 @@ function App() {
       </div>
 
 
-
+      {Footer()}
 
     </div>
 

@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect, useState, ReactNode, useCallback } from "react";
-import { BEARER, api_adress, AUTH_TOKEN } from "../strapi/strapi_interface";
+import { BEARER, api_address, AUTH_TOKEN } from "../strapi/strapi_interface";
 import { AuthContext } from "../../context/authContext";
 import { user_entry } from "../strapi/strapi_entries";
 
@@ -15,7 +15,7 @@ const AuthProvider: React.FC<AuthProverProps> = ({ children }) => {
     const fetchLoggedInUser = async (token: string) => {
         setIsLoading(true)
         try {
-            const response = await fetch(`${api_adress}/api/users/me?populate[0]=profilePicture&populate[1]=projects&populate[2]=trophies`, {
+            const response = await fetch(`${api_address}/api/users/me?populate[0]=profilePicture&populate[1]=projects&populate[2]=trophies`, {
                 headers: { Authorization: `${BEARER} ${token}` },
             });
             const data = await response.json();

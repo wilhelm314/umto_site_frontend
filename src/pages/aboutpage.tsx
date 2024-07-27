@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { page_entry } from "../components/strapi/strapi_entries";
-import { getAboutPageURL, getImageURL } from "../components/strapi/strapi_interface";
+import { getAboutPage, getImageURL } from "../components/strapi/strapi_interface";
 import { gallery } from "../components/strapi/strapi_entries";
-import { ImageSlider } from "../components/ImageSlider";
 import { parseRichText } from "../components/strapi/strapi_rich_text";
 
 export function AboutPage() {
@@ -10,7 +9,7 @@ export function AboutPage() {
 
 
     useEffect(() => {
-        fetch(getAboutPageURL())
+        fetch(getAboutPage())
             .then(x => x.json())
             .then(x => {
                 return set_about_page(x.data as page_entry);

@@ -85,17 +85,19 @@ export type public_project_entry = {
         createdAt: string,
         publishedAt: string,
         updatedAt: string,
+        row: row_component,
         description: {
-            id: number,
             title: string,
-            description: rich_text_element[]
+            description: rich_text_element[],
+            gallery: gallery,
+            image: image
         }
         leaders: {
             id: number,
             user: {
                 data: user_relation
             }
-            roleDescription: rich_text_element[]
+            roleDescription: string
         }[]
     }
 }
@@ -106,11 +108,12 @@ export type member_project_entry = {
         createdAt: string,
         publishedAt: string,
         updatedAt: string,
+        row: row_component,
         torveholdere: {
             user: {
                 data: user_relation
             },
-            roleDescription: rich_text_element[]
+            roleDescription: string
         }[]
         externalLinks: {
             title: string,
@@ -119,7 +122,9 @@ export type member_project_entry = {
         }
         description: {
             title: string,
-            description: rich_text_element[]
+            description: rich_text_element[],
+            gallery: gallery,
+            image: image
         }
     }
 }
@@ -180,12 +185,13 @@ export type gallery = {
     data: image_data[]
 }
 
-export type culture_contributer_type = "venue" | "youthHouse";
+export type culture_contributer_type = "venue" | "youthHouse" | 'smukBus';
 
 export type column_component = {
     id: number,
     richtext: rich_text_element[],
     title: string,
+    image: image
 }
 
 export type row_component = {
@@ -223,7 +229,19 @@ export type navbar_entry = {
         createdAt: string,
         updateAt: string,
         publishedAt: string,
-        logo: image
+        logo: image,
+        navburger: image
+    }
+}
+
+export type smukbus_entry = {
+    id: number,
+    attributes: {
+        type: culture_contributer_type,
+        createdAt: string,
+        updateAt: string,
+        publishedAt: string,
+        mapPoint: MapPoint
     }
 }
 

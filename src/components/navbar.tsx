@@ -41,10 +41,10 @@ export function Navbar() {
                     <div className="align-left basis-1/2">
                         <img src={getImageURL(navbarData?.attributes.logo.data.attributes.url ?? "").toString()} alt="" className="max-w-full max-h-full hover:cursor-pointer	" onClick={() => navigate('/')} />
                     </div>
-                    <div className="align right text-right basis-1/2 hover:cursor-pointer" onClick={() => navigate('/nav')}>
-                        NNN
-                    </div>
 
+                    <div className="flex justify-end align-right items-right basis-1/2 h-full w-full">
+                        <img className="max-w-full max-h-full hover:cursor-pointer" onClick={() => navigate('/nav')} src={getImageURL(navbarData?.attributes.navburger.data.attributes.url ?? "").toString()} alt="" />
+                    </div>
 
                 </div >
 
@@ -60,7 +60,7 @@ export function Navbar() {
                 <div className="text-center mx-auto h-full flex justify-center items-center  basis-1/3">
                     <Link to='/projects' className="mx-4 text-black hover:text-red">Events</Link>
                     <Link to='/community' className="mx-4 text-black hover:text-red">Community</Link>
-                    <Link to='/about' className="mx-4 text-black hover:text-red">Organisation</Link>
+                    <Link to='/organisation' className="mx-4 text-black hover:text-red">Organisation</Link>
                 </div>
 
                 <div className="text-right mx-auto h-full flex justify-end items-center  basis-1/3">
